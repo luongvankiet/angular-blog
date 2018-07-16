@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/dist/css/bootstrap.css";
+@import "src/assets/css/login.css";
+@import "src/assets/css/dashboard.css";
+@import "src/assets/css/style.css";
+@import "src/assets/css/animate.css";
+@import "src/assets/fonts/ionicons/css/ionicons.min.css";
+@import "src/assets/fonts/fontawesome/css/font-awesome.min.css";
+@import "src/assets/fonts/flaticon/font/flaticon.css";
+@import "owl.carousel/dist/assets/owl.carousel.css";
+
+.pointer{
+    cursor: pointer;
+}

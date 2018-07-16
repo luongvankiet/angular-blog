@@ -23,9 +23,19 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/ng-snotify/styles/material.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/jquery/jquery-2.2.4.min.js",
+              "./node_modules/popper.js/dist/umd/popper.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/plugins.js",              
+              "src/assets/js/login.js",              
+              "src/assets/js/dashboard.js",              
+              "src/assets/js/comment.js",              
+              "./node_modules/owl.carousel/dist/owl.carousel.js"
+            ]
           },
           "configurations": {
             "production": {

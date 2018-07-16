@@ -1,0 +1,41 @@
+<div class="container logo-wrap">
+  <div class="row pt-5">
+    <div class="col-12 text-center">
+      <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false"
+        aria-controls="navbarMenu">
+        <span class="burger-lines"></span>
+      </a>
+      <h1 class="site-logo">
+        <a routerLink="/">Blog</a>
+      </h1>
+    </div>
+  </div>
+</div>
+<nav class="navbar navbar-expand-md  navbar-light bg-light">
+  <div class="container">
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link active" routerLink="/">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle pointer" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown05">
+            <ng-container *ngFor="let category of categories">
+              <a class="dropdown-item" routerLink="categories/{{category.category_slug}}/{{category.id}}">{{category.category_name}}</a>
+            </ng-container>
+          </div>
+
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about.html">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>

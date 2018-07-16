@@ -16,5 +16,9 @@
       "es2017",
       "dom"
     ]
+  },
+  "paths": {
+    "@app-image/*": ["assets/images/*"],
+    "@env/*": ["environments/*"]
   }
 }

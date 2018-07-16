@@ -1,0 +1,26 @@
+<!--posts content-->
+<ng-container *ngFor="let category of categories">
+  <div class="row">
+    <h2 class="col-md-10">{{category.category_name}}</h2>
+    <a routerLink="categories/{{category.category_slug}}/{{category.id}}" class="col-md-2 d-flex justify-content-end" style="padding-top: 15px;">More -></a>
+  </div>
+  <hr>
+  <div class="row">
+    <ng-container id="post" *ngFor="let post of category.posts">
+      <div class="col-md-6">
+        <a href="blog-single.html" class="blog-entry" data-animate-effect="fadeIn">
+          <img src="http://localhost:8000/images/{{images[0].image}}" alt="Image placeholder">
+          <div class="blog-content-body">
+            <div class="post-meta">
+              <span class="category">{{category.category_name}}</span>
+              <span class="mr-2">{{post.created_at}}</span>
+              <span class="ml-2">
+                <span class="fa fa-comments"></span> 3</span>
+            </div>
+            <h2>{{post.title}}</h2>
+          </div>
+        </a>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

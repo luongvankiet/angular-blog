@@ -1,0 +1,49 @@
+<div class="row mb-4">
+  <div class="col-md-12">
+    <h2 class="mb-4">Category: {{category.category_name}}</h2>
+  </div>
+</div>
+
+<div class="row mb-5 mt-5" *ngFor="let post of category.posts">
+  <div class="col-md-12">
+    <div class="post-entry-horzontal">
+      <a href="#">
+        <img class="image" data-animate-effect="fadeIn" src="assets/images/img_10.jpg">
+        <span class="text">
+          <div class="post-meta">
+            <span class="category">{{category.category_name}}</span>
+            <span class="mr-2">{{post.created_at}}</span>
+            <span class="ml-2">
+              <span class="fa fa-comments"></span> 3</span>
+          </div>
+          <h2>{{post.title}}</h2>
+        </span>
+      </a>
+    </div>
+    <!-- END post -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <nav aria-label="Page navigation" class="text-center">
+      <ul class="pagination">
+        <li class="page-item  active">
+          <a class="page-link" href="#">Prev</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="#">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
