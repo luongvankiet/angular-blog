@@ -1,17 +1,18 @@
 <header role="banner">
-  <app-navbar></app-navbar>
-  <app-header></app-header>
+  <app-header *ngIf="onLoadHeader == true"></app-header>
 </header>
-<section class="site-section">
+<app-carousel *ngIf="onLoadCarousel"></app-carousel>
+<section class="site-section pt-5">
   <div class="container">
     <div class="row blog-entries">
+      <!--posts content-->
       <div class="col-md-12 col-lg-8 main-content">
         <router-outlet></router-outlet>
       </div>
-      <div class="col-md-12 col-lg-4 sidebar">
+      <div class="col-md-12 col-lg-4 sidebar pt-5">
         <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>
 </section>
-<ng-snotify></ng-snotify>
+<app-footer></app-footer>

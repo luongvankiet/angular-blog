@@ -1,49 +1,60 @@
-<div class="row mb-4">
-  <div class="col-md-12">
-    <h2 class="mb-4">Category: {{category.category_name}}</h2>
-  </div>
-</div>
-
-<div class="row mb-5 mt-5" *ngFor="let post of category.posts">
-  <div class="col-md-12">
-    <div class="post-entry-horzontal">
-      <a href="#">
-        <img class="image" data-animate-effect="fadeIn" src="assets/images/img_10.jpg">
-        <span class="text">
-          <div class="post-meta">
-            <span class="category">{{category.category_name}}</span>
-            <span class="mr-2">{{post.created_at}}</span>
-            <span class="ml-2">
-              <span class="fa fa-comments"></span> 3</span>
-          </div>
-          <h2>{{post.title}}</h2>
-        </span>
-      </a>
+<ng-container *ngIf="_hasCategory; else noCategory">
+  <ng-container *ngIf="category.posts_count > 0; else noPost">
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <h2 class="mb-4">Category: {{category.category_name}}</h2>
+      </div>
     </div>
-    <!-- END post -->
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-12 text-center">
-    <nav aria-label="Page navigation" class="text-center">
-      <ul class="pagination">
-        <li class="page-item  active">
-          <a class="page-link" href="#">Prev</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</div>
+    <div class="row mb-5 mt-5" *ngFor="let post of _paginatedPosts">
+      <div class="col-md-12">
+        <div class="post-entry-horzontal">
+          <a routerLink="/posts/{{post.slug}}">
+            <ng-container *ngIf="post.images.length > 0; else noImage">
+              <ng-container *ngFor="let image of post.images">
+                <div class="image element-animate element-animated fadeIn" data-animate-effect="fadeIn" [ngStyle]="{'background-image' : 'url(http://localhost:8000/images/'+image.image+')'}"></div>
+              </ng-container>
+            </ng-container>
+            <ng-template #noImage>
+              <div class="image element-animate element-animated fadeIn" data-animate-effect="fadeIn" style="background-image: url(assets/images/placeholdImage.jpg);"></div>
+            </ng-template>
+            <span class="text">
+              <div class="post-meta">
+                <span class="category">{{category.category_name}}</span>
+                <span class="mr-2">{{post.created_at|date}}</span>
+                <span class="ml-2">
+                  <span class="fa fa-comments"></span> {{post.comments_count}}</span>
+                <span class="ml-2">
+                  <span class="fa fa-user"></span>{{post.users.name}}
+                </span>
+              </div>
+              <h2>{{post.title}}</h2>
+            </span>
+          </a>
+        </div>
+        <!-- END post -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <nav aria-label="Page navigation" class="text-center">
+          <pagination [totalItems]="posts.length" previousText="&lsaquo;" nextText="&rsaquo;" [itemsPerPage]="5" (pageChanged)="pageChanged($event)"></pagination>
+        </nav>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noPost>
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <h2 class="mb-4">Category: {{category.category_name}}</h2>
+      </div>
+    </div>
+    <div class="text-center">
+      <p>No post is available in this category</p>
+    </div>
+  </ng-template>
+</ng-container>
+<ng-template #noCategory>
+  <app-page-not-found></app-page-not-found>
+</ng-template>

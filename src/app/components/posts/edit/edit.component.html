@@ -1,0 +1,90 @@
+<ng-container *ngIf="isLoggedIn; else login">
+  <h3>Edit post</h3>
+  <hr>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" [ngClass]="{ 'is-invalid': textFormControl.invalid&&textFormControl.touched }" name="title"
+          #textFormControl="ngModel" [(ngModel)]="post.title" placeholder="Title" required maxlength="255" />
+        <div class="invalid-feedback" *ngIf="textFormControl.errors?.required&&textFormControl.touched">Title field is required</div>
+        <div class="invalid-feedback" *ngIf="textFormControl.errors?.maxlength&&textFormControl.touched">Title field must be less than 255 characters</div>
+      </div>
+
+      <div class="form-group">
+        <label for="thumbnail">Thumbnail</label>
+        <input type="image" class="form-control image" name="thumbnail" src="{{imageUrl}}" width="500" (click)="openModal(template)">
+        <ng-template #template>
+          <div class="modal-header">
+            <h4 class="modal-title pull-left">Upload image</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="containerImg">
+                <ng-container *ngIf="images.length > 0">
+                  <div class="boxImg" *ngFor="let image of images; let i = index">
+                    <div class="imgBox">
+                      <img src="http://localhost:8000/images/{{image.image}}">
+                    </div>
+                    <div class="details">
+                      <div class="content">
+                        <button class="btn btn-primary btn-block" (click)="onSet(image.id, post.id, post.user_id)">Choose</button>
+                        <button class="btn btn-danger btn-block" (click)="onDelete(image.id, i)">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="boxImg">
+                  <button type="button" class="btn btn-outline-primary btn-circle btn-xl" style="margin-top: 65px; margin-left: 30px;" (click)="file.click()">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                  <input type="file" hidden #file name="thumbnail" (change)="onUpload($event.target.files, post.id, post.user_id)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="form-group mt-30">
+        <label for="content">Content</label>
+        <ckeditor name="content" [ngClass]="{ 'is-invalid': contentFormControl.invalid&&contentFormControl.touched }" [(ngModel)]="post.content"
+          debounce="500" #contentFormControl="ngModel" [config]="{extraPlugins: 'divarea'}" placeholder="Content" required></ckeditor>
+        <div class="invalid-feedback" *ngIf="contentFormControl.errors?.required&&contentFormControl.dirty">Content field is required</div>
+      </div>
+
+      <div class="form-group">
+        <label>Categories</label>
+        <select [(ngModel)]="post.category_id" name="category" class="form-control" [ngClass]="{ 'is-invalid': categoryFormControl.invalid&&categoryFormControl.touched }"
+          #categoryFormControl="ngModel" required>
+          <option [ngValue]="null">
+            Please Select
+          </option>
+          <option *ngFor="let category of categories" [ngValue]="category.id">{{category.category_name}}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="categoryFormControl.errors?.required&&categoryFormControl.touched">Category is required</div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-primary btn-block" (click)="onSubmit(post, user)"> Save </button>
+          </div>
+          <div class="col-md-6">
+            <button type="button" class="btn btn-default btn-block" (click)="onBack()"> Cancel </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #login>
+  <div class="container text-center">
+    <a routerLink="/login">
+      <h3>Login required</h3>
+      <img src="assets/images/login.png" width="400" alt="Login required">
+    </a>
+  </div>
+</ng-template>

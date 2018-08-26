@@ -1,0 +1,42 @@
+.dropdown-toggle::after {
+    display: none;
+}
+
+.post-content{
+    height: auto;
+    overflow: auto;
+    padding: 5px;
+}
+
+.comments-list {
+    padding: 0;
+    margin-top: 20px;
+    list-style-type: none;
+}
+.comment {
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+}
+.avatar {
+    width: 35px;
+    height: 35px;
+}
+.comment-heading {
+    display: block;
+    width: 100%;
+}
+.comment-heading .user {
+    font-weight: bold;
+    display: inline;
+    margin-right: 10px;
+}
+.comment-heading .time {
+    font-size: 15px;
+    color: #aaa;
+    display: inline;
+}
+
+.reply{
+    min-width: 100px;
+}

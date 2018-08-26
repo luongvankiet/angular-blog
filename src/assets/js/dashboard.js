@@ -45,4 +45,3 @@ var Dashboard = function () {
 }();
 
 Dashboard.init();
-//# sourceURL=pen.js

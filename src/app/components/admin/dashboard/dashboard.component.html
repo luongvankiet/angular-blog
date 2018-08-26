@@ -1,0 +1,45 @@
+<div class="l-sidebar " style="margin-top: 60px;">
+  <div class="l-sidebar__content">
+    <nav class="c-menu js-menu">
+      <ul class="u-list">
+        <li class="c-menu__item {{(isActive('/admin'))? 'is-active':'has-submenu'}}" title="Posts">
+          <a routerLink="/admin">
+            <div class="c-menu__item__inner">
+              <i class="fa fa-file-o"></i>
+            </div>
+          </a>
+        </li>
+        <li class="c-menu__item {{(isActive('/admin/categories') || isActive('/admin/categories/create')) ? 'is-active':'has-submenu'}}"
+          title="Categories">
+          <a routerLink="/admin/categories">
+            <div class="c-menu__item__inner">
+              <i class="fa fa-align-left"></i>
+            </div>
+          </a>
+        </li>
+        <li class="c-menu__item {{(isActive('/admin/users'))? 'is-active':'has-submenu'}}" title="Users">
+          <a routerLink="/admin/users">
+            <div class="c-menu__item__inner">
+              <i class="fa fa-users"></i>
+            </div>
+          </a>
+        </li>
+        <li class="c-menu__item {{(isActive('/admin/roles'))? 'is-active':'has-submenu'}}" data-toggle="tooltip" title="Roles">
+          <a routerLink="/admin/roles">
+            <div class="c-menu__item__inner">
+              <i class="fa fa-check-circle"></i>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<main class="l-main">
+  <div class="content-wrapper content-wrapper--with-bg">
+    <div class="list-group">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</main>

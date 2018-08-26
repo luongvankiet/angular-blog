@@ -1,0 +1,107 @@
+<h2 style="margin-bottom: 10px;">Manage Users</h2>
+<br>
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Nickname</th>
+      <th>Description</th>
+      <th>Date of birth</th>
+      <th>Active</th>
+      <th>Created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users" (click)="openModal(template)" class="pointer">
+      <td>{{user.id}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.email}}</td>
+      <ng-container *ngIf="user.roles.length > 0; else noRole">
+        <ng-container *ngFor="let role of user.roles">
+          <td>{{role.display_name}}</td>
+        </ng-container>
+      </ng-container>
+      <ng-template #noRole>
+        <td>No role</td>
+      </ng-template>
+      <td>{{user.nickname}}</td>
+      <td>{{user.description}}</td>
+      <td>{{user.date_of_birth|date}}</td>
+      <td *ngIf="user.active == 1" class="text-center">
+        <span class="fa fa-check-circle"></span>
+      </td>
+      <td *ngIf="user.active == 0" class="text-center">
+        <span class="fa fa-times-circle"></span>
+      </td>
+      <td>{{user.created_at|date}}</td>
+      <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">{{user.name}}</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group row">
+              <label for="staticName" class="col-sm-3 col-form-label">Name:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="staticName" #name="ngModel" [ngClass]="{ 'is-invalid': name.invalid&&name.touched }"
+                  [(ngModel)]="user.name" required>
+                <div class="invalid-feedback" *ngIf="name.errors?.required&&name.touched">Name field is required</div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Email:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="staticEmail" #email="ngModel" [ngClass]="{ 'is-invalid': email.invalid&&email.touched }"
+                  [(ngModel)]="user.email" required email>
+                <div class="invalid-feedback" *ngIf="email.errors?.required&&email.touched">Email field is required</div>
+                <div class="invalid-feedback" *ngIf="email.errors?.email&&email.touched">Email field is invalid</div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="staticNickname" class="col-sm-3 col-form-label">Nickname:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="staticNickname" #nickname='ngModel' [ngClass]="{ 'is-invalid': nickname.invalid&&nickname.touched }"
+                  [(ngModel)]="user.nickname" required>
+                <div class="invalid-feedback" *ngIf="nickname.errors?.required&&nickname.touched">Nickname field is required</div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="staticDescription" class="col-sm-3 col-form-label">Description:</label>
+              <div class="col-sm-9">
+                <textarea type="text" class="form-control" id="staticDescription" #description="ngModel" [ngClass]="{ 'is-invalid': description.invalid&&description.touched }"
+                  [(ngModel)]="user.description" required></textarea>
+                <div class="invalid-feedback" *ngIf="description.errors?.required&&description.touched">Description field is required</div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="staticDateOfBirth" class="col-sm-3 col-form-label">BirthDay:</label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="staticDateOfBirth" #date="ngModel" [ngClass]="{ 'is-invalid': date.invalid&&date.touched }"
+                  [(ngModel)]="user.date_of_birth" required>
+                <div class="invalid-feedback" *ngIf="date.errors?.required&&date.touched">Date field is required</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="radio" id="staticActive" [(ngModel)]="user.active" [value]="1"> Activate
+              <br>
+              <input type="radio" id="staticActive" [(ngModel)]="user.active" [value]="0"> Deactivate
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-danger" (click)="onDelete(user)">Delete</button>
+          <div>
+            <button type="button" class="btn btn-primary" (click)="onSubmit(user)" style="margin-right: 10px">Edit</button>
+            <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
+          </div>
+        </div>
+      </ng-template>
+    </tr>
+  </tbody>
+</table>

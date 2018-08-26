@@ -16,24 +16,27 @@
     <div class="collapse navbar-collapse" id="navbarMenu">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link active" routerLink="/">Home</a>
+          <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle pointer" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
+        <li class="nav-item" *ngFor="let category of categories">
+          <a class="nav-link" routerLink="/categories/{{category.category_slug}}" routerLinkActive="active">{{category.category_name}}</a>
+        </li>
+
+        <li class="nav-item dropdown" *ngIf="moreCategories">
+          <a class="nav-link dropdown-toggle pointer" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
           <div class="dropdown-menu" aria-labelledby="dropdown05">
-            <ng-container *ngFor="let category of categories">
-              <a class="dropdown-item" routerLink="categories/{{category.category_slug}}/{{category.id}}">{{category.category_name}}</a>
+            <ng-container *ngFor="let category of moreCategories">
+              <a class="dropdown-item" routerLink="/categories/{{category.category_slug}}">{{category.category_name}}</a>
             </ng-container>
           </div>
-
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="about.html">About</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="contact.html">Contact</a>
-        </li>
+        </li> -->
       </ul>
 
     </div>

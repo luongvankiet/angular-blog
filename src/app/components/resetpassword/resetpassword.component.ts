@@ -38,7 +38,8 @@ export class ResetpasswordComponent implements OnInit {
 
   handleResponse(data) {
     if (!data.error) {
-      this.router.navigateByUrl('/');
+      this.notify.success('Now login with your new password', 'Success!');
+      this.router.navigateByUrl('/login');
     } else {
       this.error = this.notify.error(data.error, 'Please try again!', { timeout: 5000 });
     }

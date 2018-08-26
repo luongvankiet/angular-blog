@@ -1,3 +1,42 @@
-<p>
-  profile works!
-</p>
+<div class="profile">
+    <img align="left" class="image-lg" src="{{coverImageUrl}}" alt="Profile image example" />
+    <img align="left" class="image-profile thumbnail rounded-circle" src="{{avatarUrl}}" alt="Profile image example" />
+    <div>
+        <h1>{{user.name}}</h1>
+    </div>
+    <br>
+    <hr>
+    <div style="clear: both;">
+        <tabset [justified]="true">
+            <tab heading="Information">
+                <ng-container *ngIf="isLoading; else profileInfo">
+                    <app-preloader></app-preloader>
+                </ng-container>
+                <ng-template #profileInfo>
+                    <ng-container *ngIf="user.id == currentUser.id; else notCurrentUser">
+                        <app-profile-edit [user]="user" [coverImageUrl]="coverImageUrl" [avatarUrl]="avatarUrl"></app-profile-edit>
+                    </ng-container>
+                    <ng-template #notCurrentUser>
+                        <app-profile-info [user]="user"></app-profile-info>
+                    </ng-template>
+                </ng-template>
+            </tab>
+            <tab heading="Posts" id="tab1">
+                <ng-container *ngIf="isLoading; else profilePosts">
+                    <app-preloader></app-preloader>
+                </ng-container>
+                <ng-template #profilePosts>
+                    <app-profile-posts [user]="user"></app-profile-posts>
+                </ng-template>
+            </tab>
+            <tab heading="Images">
+                <ng-container *ngIf="isLoading; else profileImages">
+                    <app-preloader></app-preloader>
+                </ng-container>
+                <ng-template #profileImages>
+                    <app-profile-images [user]="user"></app-profile-images>
+                </ng-template>
+            </tab>
+        </tabset>
+    </div>
+</div>

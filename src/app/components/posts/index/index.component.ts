@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, take, switchMap } from 'rxjs/operators';
@@ -6,6 +6,8 @@ import { PostService } from '../../../services/post.service';
 import { CategoryService } from '../../../services/category.service';
 import { ImageService } from '../../../services/image.service';
 import { tap } from 'rxjs/operators';
+import { PageChangedEvent } from 'ngx-bootstrap';
+import { forEach } from '@angular/router/src/utils/collection';
 
 
 @Component({
@@ -14,17 +16,17 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./index.component.css']
 })
 export class IndexComponent implements OnInit {
-
-  public posts;
-  public categories;
+  public posts = [];
+  public categories = [];
+  public categoriesPaginate = [];
+  public postsPaginate = [];
   public images;
+  public countLike = [];
+  public countDislike = [];
+  isLoading = true;
   hasImage: boolean;
-  public ImageUrl = 'http://localhost:8000/images';
-
-  private _observablePostsData: Observable<any>;
-  private _observableCategoriesData: Observable<any>;
-  private _observableImagesData: Observable<any>;
-
+  public ImageUrl = `http://localhost:8000/images`;
+  private _returnedArray = [];
 
   constructor(
     private _postService: PostService,
@@ -33,71 +35,65 @@ export class IndexComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getPosts();
     this.getCategories();
-    this.getImages();
   }
 
   ngOnDestroy(): void {
 
   }
 
-  getPosts() {
-    this._observablePostsData = this._postService.getAllPosts();
-    this._observablePostsData.pipe(map(data => {
-      return data.data;
-    })).subscribe(
-      data => this.handlePostsData(data),
-      error => console.log(error)
-    );
-  }
-
   getCategories() {
-    this._observableCategoriesData = this._categoryService.getAllCategories();
-    this._observableCategoriesData.pipe(map(data => {
-      return data.data;
-    })).subscribe(
-      data => this.handleCategoriesData(data),
-      error => console.log(error)
-    );
-  }
-
-  getImages() {
-    this.hasImage = true;
-    this._observableImagesData = this._imageService.loadImage();
-    this._observableImagesData.subscribe(
+    this._categoryService.getAllCategories().subscribe(
       data => {
-        this.images = data.data;
-        console.log(this.images)
-        this.hasImage = false;
+        this.handleCategoriesData(data);
+        this.isLoading = false;
       },
-
-      error => {
-        this.hasImage = false;
-        console.log(error);
-
-      }
     );
   }
-
-  createImageFromBlob(image: Blob) {
-    let reader = new FileReader();
-    reader.addEventListener("load", () => {
-      this.images = reader.result;
-    }, false);
-
-    if (image) {
-      reader.readAsDataURL(image);
-    }
-  }
-
 
   handleCategoriesData(data) {
-    this.categories = data;
+    this.categories = data.data;
+    this.categoriesPaginate = this.categories.slice(0, 7);
+    this.categories.forEach(category => {
+      category.posts.forEach(post => {
+        this._postService.countLikeDislike(post.id).subscribe(
+          data => {
+            this.handleCount(post.id, data);
+          }
+        )
+      });
+      this.postsPaginate.push([category.id, category.posts.slice(0, 4)]);
+    });
   }
 
-  handlePostsData(data) {
-    this.posts = data;
+  handleCount(post_id, data) {
+    this.countLike.push([post_id, data.like]);
+    this.countDislike.push([post_id, data.dislike]);
   }
 
+  // handlePostsData(data) {
+  //   this.posts.push(data.data);
+  // }
+
+  pageChanged(event: PageChangedEvent): void {
+    const startItem = (event.page - 1) * event.itemsPerPage;
+    const endItem = event.page * event.itemsPerPage;
+    this.categoriesPaginate = this.categories.slice(startItem, endItem);
+  }
+
+  // postChanged(category_id, event: PageChangedEvent, i): void {
+  //   this.postsPaginate.forEach(post => {
+  //     if (category_id == post[0]) {
+  //       this.categories.forEach(category => {
+  //         if (category.id == category_id) {
+  //           const startItem = (event.page - 1) * event.itemsPerPage;
+  //           const endItem = event.page * event.itemsPerPage;
+  //           this.postsPaginate.splice(i, 1, [category_id, category.posts.slice(startItem, endItem)]);
+  //         }
+  //       });
+  //       // const index = this.postsPaginate.find(post => post.category_id = category_id);
+  //     }
+  //   })
+
+  // }
 }

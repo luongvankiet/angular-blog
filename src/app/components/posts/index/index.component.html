@@ -1,26 +1,76 @@
-<!--posts content-->
-<ng-container *ngFor="let category of categories">
+<ng-container *ngIf="isLoading == true; else loaded">
   <div class="row">
-    <h2 class="col-md-10">{{category.category_name}}</h2>
-    <a routerLink="categories/{{category.category_slug}}/{{category.id}}" class="col-md-2 d-flex justify-content-end" style="padding-top: 15px;">More -></a>
-  </div>
-  <hr>
-  <div class="row">
-    <ng-container id="post" *ngFor="let post of category.posts">
-      <div class="col-md-6">
-        <a href="blog-single.html" class="blog-entry" data-animate-effect="fadeIn">
-          <img src="http://localhost:8000/images/{{images[0].image}}" alt="Image placeholder">
-          <div class="blog-content-body">
-            <div class="post-meta">
-              <span class="category">{{category.category_name}}</span>
-              <span class="mr-2">{{post.created_at}}</span>
-              <span class="ml-2">
-                <span class="fa fa-comments"></span> 3</span>
-            </div>
-            <h2>{{post.title}}</h2>
-          </div>
-        </a>
-      </div>
-    </ng-container>
+    <div class="col-md-12 text-center">
+      <app-preloader></app-preloader>
+    </div>
   </div>
 </ng-container>
+<ng-template #loaded>
+  <ng-container *ngFor="let category of categoriesPaginate">
+    <div class="row">
+      <h2 class="col-md-10">{{category.category_name}}</h2>
+      <div class="col-md-2 row d-flex justify-content-end" style="padding-top: 10px;">
+        <a routerLink="categories/{{category.category_slug}}" class="col-md-12">More</a>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <ng-container *ngIf="category.posts_count > 0;else noPost">
+        <ng-container *ngFor="let index of postsPaginate; let i = index">
+          <ng-container *ngIf="category.id == index[0]">
+            <ng-container *ngFor="let post of index[1]">
+              <div class="col-md-6">
+                <a class="blog-entry" routerLink="/posts/{{post.slug}}">
+                  <ng-container *ngIf="post.images.length > 0; else noImage">
+                    <ng-container *ngFor="let image of post.images">
+                      <img src="{{ImageUrl}}/{{image.image}}" alt="Image placeholder">
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #noImage>
+                    <img src="assets\images\placeholdImage.jpg" alt="Image placeholder">
+                  </ng-template>
+                  <div class="blog-content-body">
+                    <div class="post-meta">
+                      <span class="category">{{category.category_name}}</span>
+                      <span>{{post.created_at | date}}</span>
+                      <span class="ml-2">
+                        <ng-container *ngFor="let like of countLike">
+                          <ng-container *ngIf="post.id == like[0]">
+                            <span class="fa fa-thumbs-o-up pointer"></span> {{like[1]}}
+                          </ng-container>
+                        </ng-container>
+                      </span>
+                      <span class="ml-2">
+                        <ng-container *ngFor="let dislike of countDislike">
+                          <ng-container *ngIf="post.id == dislike[0]">
+                            <span class="fa fa-thumbs-o-down pointer"></span> {{dislike[1]}}
+                          </ng-container>
+                        </ng-container>
+                      </span>
+                    </div>
+                    <h2>{{post.title}}</h2>
+                    <div class="post-meta">
+                      Posted by
+                      <a routerLink="/profile/{{post.users.id}}">{{post.users.name}}</a>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-template #noPost>
+        <div class="col-md-12 text-center">
+          <p>No post is available in this category</p>
+        </div>
+      </ng-template>
+    </div>
+  </ng-container>
+  <div class="col-md-12 d-flex justify-content-center">
+    <nav aria-label="Page navigation" class="text-center">
+      <pagination [totalItems]="categories.length" [itemsPerPage]="7" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+        nextText="&rsaquo;" pageBtnClass="btn" class="pull-left"></pagination>
+    </nav>
+  </div>
+</ng-template>

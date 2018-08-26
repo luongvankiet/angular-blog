@@ -1,0 +1,92 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-4">
+        <h3>Paragraph</h3>
+        <ng-container *ngIf="isPopularPostLoading; else loaded">
+          <app-preloader></app-preloader>
+        </ng-container>
+        <ng-template #loaded>
+          <a routerLink="/posts/{{popularPosts[0].slug}}">
+            <ng-container *ngIf="popularPosts[0].images.length > 0; else noImage">
+              <p>
+                <img src="http://localhost:8000/images/{{popularPosts[0].images[0].image}}" width="350" alt="Image placeholder" class="img-fluid">
+              </p>
+            </ng-container>
+            <ng-template #noImage>
+              <p>
+                <img src="assets/images/placeholdImage.jpg" width="350" alt="Image placeholder" class="img-fluid">
+              </p>
+            </ng-template>
+            <p [innerHTML]="(popularPosts[0].content.length>300)? (popularPosts[0].content | slice:0:300)+'...':(popularPosts[0].content) "></p>
+          </a>
+        </ng-template>
+      </div>
+      <div class="col-md-6 ml-auto">
+        <div class="row">
+          <div class="col-md-7">
+            <h3>Latest Post</h3>
+            <div class="post-entry-sidebar">
+              <ng-container *ngIf="isLatestPostLoading; else latestPostsLoaded">
+                <app-preloader></app-preloader>
+              </ng-container>
+              <ng-template #latestPostsLoaded>
+                <ul>
+                  <li *ngFor="let post of latestPosts">
+                    <a routerLink="/posts/{{post.slug}}">
+                      <ng-container *ngIf="post.images.length > 0; else noLastestPostImage">
+                        <img src="http://localhost:8000/images/{{post.images[0].image}}" alt="Image placeholder" class="mr-4">
+                      </ng-container>
+                      <ng-template #noLastestPostImage>
+                        <img src="assets/images/placeholdImage.jpg" alt="Image placeholder" class="mr-4">
+                      </ng-template>
+                      <div class="text">
+                        <h4>{{post.title}}</h4>
+                        <div class="post-meta">
+                          <span class="mr-2">{{post.created_at|date}}</span>
+                          <span class="ml-2">
+                            <span class="fa fa-user"></span> {{post.users.name}}</span>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </ng-template>
+            </div>
+          </div>
+          <div class="col-md-1"></div>
+
+          <div class="col-md-4">
+
+            <div class="mb-5">
+              <h3>Categories</h3>
+              <ul class="list-unstyled">
+                <li *ngFor="let category of categories">
+                  <a routerLink="/categories/{{category.category_slug}}">{{(category.category_name.length>50)? (category.category_name | slice:0:50)+'...':(category.category_name)
+                    }}
+                  </a>
+                </li>
+                <li class="dropdown">
+                  <a class="dropdown-toggle" style="color: #fff" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenu2 ">
+                    <ng-container *ngFor="let category of moreCategories">
+                      <a class="dropdown-item" routerLink="/categories/{{category.category_slug}}" style="color: black">{{(category.category_name.length>50)? (category.category_name | slice:0:50)+'...':(category.category_name)}}</a>
+                    </ng-container>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row ">
+      <div class="col-md-12 ">
+        Made by Lương Văn Kiệt
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- END footer -->

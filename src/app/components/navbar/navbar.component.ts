@@ -1,138 +1,95 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { JwtAuthService } from '../../services/jwt-auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth-service.service';
 
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { SnotifyService } from 'ng-snotify';
-
+import { UserService } from '../../services/user.service';
+import { RoutingStateService } from '../../services/routing-state.service';
+import { TransferDataService } from '../../services/transfer-data.service';
+import { FormControl } from '@angular/forms';
+import { SearchService } from '../../services/search.service';
+import { PostService } from '../../services/post.service';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  modalRef: BsModalRef;
-  modalRef2: BsModalRef;
-  returnUrl: string;
-
-  public loggedIn: boolean;
-
-  public login_form = {
-    email: null,
-    password: null
-  }
-
-  public register_form = {
-    name: null,
-    email: null,
-    password: null,
-    password_confirmation: null
-  }
-
-  public resetpassword_form = {
-    email: null
-  }
-
+  private currenUrl: string;
+  private returnUrl: string;
+  private logoutUrl;
+  public username = localStorage.getItem('username');
+  public user = [];
+  public posts;
+  public isLoggedIn: boolean;
   public error = [];
-  public resetError = null;
-  public loginError = null;
 
   constructor(
     private _route: ActivatedRoute,
     private _jwt: JwtAuthService,
     private _router: Router,
     private _auth: AuthService,
-    private _modalService: BsModalService,
-    private _notify: SnotifyService
-  ) { }
+    private _userService: UserService,
+    private _routingState: RoutingStateService,
+    private _transferData: TransferDataService,
+    private _searchService: SearchService,
+    private _postService: PostService,
+    private _cd: ChangeDetectorRef
+  ) {
+  }
 
   ngOnInit() {
-    this._auth.authStatus.subscribe(value => this.loggedIn = value);
-    this.returnUrl = this._router.url;
+    this._auth.authStatus.subscribe(value => this.isLoggedIn = value);
+    this.returnUrl = this._routingState.getPreviousUrl();
+    this.updateNav();
+    this._userService.changeEmitted$.subscribe(
+      text => {
+        if (text == 'Login successfully')
+          this.updateNav();
+      });
+    // this.getPost();
+
   }
 
-  openModal(template: TemplateRef<any>, event: MouseEvent) {
-    event.preventDefault();
-    this.modalRef = this._modalService.show(template);
+  updateNav() {
+    let token = localStorage.getItem('token');
+    if (token) {
+      this.getUser(token);
+    }
   }
 
-
-  openModal2(template: TemplateRef<any>, event: MouseEvent) {
-    event.preventDefault();
-    this.modalRef2 = this._modalService.show(template);
-    this.modalRef.hide();
+  onChange(event) {
+    this._router.navigate([`search`, event]);
   }
+
 
   logout(event: MouseEvent) {
     event.preventDefault();
     this._jwt.remove();
     this._auth.changeAuthStatus(false);
-    this._router.navigateByUrl('/');
+    this._router.navigate(['/']);
   }
 
-  loginSubmit() {
-    this._jwt.login(this.login_form).subscribe(
-      data => this.handleToken(data),
-      error => this.handleError(error)
-    );
+  getUser(token) {
+    this._userService.getUser(token).subscribe(
+      data => this.handleUserData(data),
+    )
   }
 
-  registerSubmit() {
-    this._jwt.register(this.register_form).subscribe(
-      data => this.handleToken(data),
-      error => this.handleError(error)
-    );
+  handleUserData(data) {
+    this.user = data;
+    this._cd.detectChanges();
   }
 
-  resetPasswordSubmit() {
-    this._jwt.resetPassword(this.resetpassword_form).subscribe(
-      data => this.handleResponse(data),
-      error => this.handleError(error)
-    );
+  getPost() {
+    this._postService.getAllPosts().subscribe(
+      data => this.handlePostsData(data),
+    )
   }
 
-  handleResponse(data) {
-    if (data.error) {
-      this.resetError = this._notify.error(data.error, 'Please try again!', { timeout: 5000 });
-    } else {
-      this._notify.success(data.data, 'Success!', { timeout: 0 });
-    }
+  handlePostsData(data) {
+    this.posts = data.data;
   }
-
-  handleToken(data) {
-    this._jwt.handle(data.access_token);
-    this._auth.changeAuthStatus(true);
-    this._router.navigateByUrl(this.returnUrl);
-  }
-
-  handleError(error) {
-    if (error.error.errors) {
-      this.error = error.error.errors;
-    }
-    this.loginError = this._notify.error(error.error.error, 'Please try again!', { timeout: 5000 });
-    if (error.error.message) {
-      this._notify.error(error.error.message, 'Please try again!', {
-        timeout: 5000,
-        showProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true
-      });
-    }
-  }
-
-
-  hideLoginModal() {
-    if (this.error = []) {
-      this.modalRef.hide();
-    }
-  }
-
-  hideRegisterModal() {
-    if (this.error = []) {
-      this.modalRef.hide();
-    }
-  }
-
 }

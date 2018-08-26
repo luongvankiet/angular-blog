@@ -6,7 +6,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class JwtAuthService {
 
-  private _baseUrl: '';
+  private _headers = new Headers({
+    'Content-Type': 'application/json',
+  });
+
+  private _token;
 
   private iss = {
     login: 'http://localhost:8000/api/auth/login',
@@ -15,8 +19,8 @@ export class JwtAuthService {
 
   constructor(
     private _http: HttpClient,
-  ) {console.log(this.checkExpiredToken());
-   }
+  ) {
+  }
 
   login(data) {
     return this._http.post('http://localhost:8000/api/auth/login', data);
@@ -34,21 +38,12 @@ export class JwtAuthService {
     return this._http.post('http://localhost:8000/api/auth/changepassword', data);
   }
 
-
-
-  // getUser(token){
-  //   return this._http.post(`${this._baseUrl}/me`);
-  // }
-
   handle(token) {
     this.set(token);
   }
 
   set(token) {
-    const payload = this.payload(token);
     localStorage.setItem('token', token);
-    localStorage.setItem('expires_at', payload.exp);
-    
   }
 
   get() {
@@ -57,13 +52,16 @@ export class JwtAuthService {
 
   remove() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('user_id');
   }
 
   isValid() {
     const token = this.get();
     if (token) {
       const payload = this.payload(token);
-      if (payload) {
+      
+    if (payload) {
         return (Object.values(this.iss).indexOf(payload.iss) > -1) ? true : false;
       }
     }
@@ -72,15 +70,31 @@ export class JwtAuthService {
 
   payload(token) {
     return JSON.parse(atob(token.split('.')[1]));
+    
   }
 
-  loggedIn() {
+  isLoggedIn() {
     return this.isValid();
   }
 
-  checkExpiredToken(){
-    const expiration = localStorage.getItem("expires_at");
-    const expiresAt = JSON.parse(expiration);
-    return expiresAt;
+  getTokenExpirationDate(token: string): Date {
+    const decoded = this.payload(token);
+
+    if (decoded.exp === undefined) return null;
+
+    const date = new Date(0); 
+    date.setUTCSeconds(decoded.exp);
+    
+    return date;
+  }
+
+  
+  isTokenExpired(token?: string): boolean {
+    if(!token) token = this.get();
+    if(!token) return true;
+
+    const date = this.getTokenExpirationDate(token);
+    if(date === undefined) return false;
+    return !(date.valueOf() > new Date().valueOf());
   }
 }

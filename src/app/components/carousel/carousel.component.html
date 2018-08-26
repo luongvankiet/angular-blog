@@ -1,23 +1,74 @@
-<carousel>
-  <slide>
-    <img src="assets/images/img_1.jpg" alt="first slide" style="display: block; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>First slide label</h3>
-      <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+<section class="site-section pt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="home-slider">
+          <ng-container *ngIf="isCarouselLoading;else CarouselLoaded">
+            <app-preloader></app-preloader>
+          </ng-container>
+          <ng-template #CarouselLoaded>
+            <carousel>
+              <slide *ngFor="let post of popularPosts">
+                <a routerLink="/posts/{{post.slug}}" routerLinkActive="active">
+                  <ng-container *ngIf="post.images.length > 0; else noImage">
+                    <ng-container *ngFor="let image of post.images">
+                      <img src="http://localhost:8000/images/{{image.image}}" alt="first slide" style="display: block; width: 100%; height: 500px;">
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #noImage>
+                    <img src="assets/images/placeholder-image10.jpg" alt="first slide" style="display: block; width: 100%; height: 500px;">
+                  </ng-template>
+                  <div class="carousel-caption d-none d-md-block">
+                    <h3 style="color: white">{{post.title}}</h3>
+                  </div>
+                </a>
+              </slide>
+            </carousel>
+          </ng-template>
+        </div>
+      </div>
     </div>
-  </slide>
-  <slide>
-    <img src="assets/images/img_2.jpg" alt="second slide" style="display: block; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>Second slide label</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <br>
+    <h2>New Posts</h2>
+    <div class="row">
+      <ng-container *ngIf="isLoading; else loaded">
+        <div class="col-md-12 text-center">
+          <app-preloader></app-preloader>
+        </div>
+      </ng-container>
+      <ng-template #loaded>
+        <div class="col-md-6 col-lg-4" *ngFor="let newPost of newPosts">
+          <ng-container *ngIf="newPost.images.length > 0; else noImage">
+            <ng-container *ngFor="let image of newPost.images">
+              <a routerLink="/posts/{{newPost.slug}}" class="a-block d-flex align-items-center height-md" [ngStyle]="{'background-image' : 'url(http://localhost:8000/images/'+image.image+')'}">
+                <div class="text">
+                  <div class="post-meta">
+                    <span class="category">{{newPost.categories.category_name}}</span>
+                    <span class="mr-2">{{newPost.created_at | date}}</span>
+                    <span class="ml-2">
+                      <span class="fa fa-user"></span> {{newPost.users.name}}</span>
+                  </div>
+                  <h3>{{newPost.title}}</h3>
+                </div>
+              </a>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noImage>
+            <a routerLink="/posts/{{newPost.slug}}" class="a-block d-flex align-items-center height-md" [ngStyle]="{'background-image' : 'url(assets/images/placeholdImage.jpg)'}">
+              <div class="text">
+                <div class="post-meta">
+                  <span class="category">{{newPost.categories.category_name}}</span>
+                  <span class="mr-2">{{newPost.created_at | date}}</span>
+                  <span class="ml-2">
+                    <span class="fa fa-user"></span> {{newPost.users.name}}</span>
+                </div>
+                <h3>{{newPost.title}}</h3>
+              </div>
+            </a>
+          </ng-template>
+        </div>
+      </ng-template>
     </div>
-  </slide>
-  <slide>
-    <img src="assets/images/img_3.jpg" alt="third slide" style="display: block; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>Third slide label</h3>
-      <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-    </div>
-  </slide>
-</carousel>
+  </div>
+</section>

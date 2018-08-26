@@ -1,194 +1,285 @@
-<h1 class="mb-4">
-  There’s a Cool New Way for Men to Wear Socks and Sandals</h1>
-<div class="post-meta">
-  <span class="category">Food</span>
-  <span class="mr-2">March 15, 2018 </span>
-  <span class="ml-2">
-    <span class="fa fa-comments"></span> 3</span>
-</div>
-<div class="post-content-body">
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium nam quas inventore, ut iure iste modi eos adipisci
-    ad ea itaque labore earum autem nobis et numquam, minima eius. Nam eius, non unde ut aut sunt eveniet rerum repellendus
-    porro.
-  </p>
-  <p>Sint ab voluptates itaque, ipsum porro qui obcaecati cumque quas sit vel. Voluptatum provident id quis quo. Eveniet maiores
-    perferendis officia veniam est laborum, expedita fuga doloribus natus repellendus dolorem ab similique sint eius cupiditate
-    necessitatibus, magni nesciunt ex eos.</p>
-  <p>Quis eius aspernatur, eaque culpa cumque reiciendis, nobis at earum assumenda similique ut? Aperiam vel aut, ex exercitationem
-    eos consequuntur eaque culpa totam, deserunt, aspernatur quae eveniet hic provident ullam tempora error repudiandae sapiente
-    illum rerum itaque voluptatem. Commodi, sequi.</p>
-  <div class="row mb-5">
-    <div class="col-md-12 mb-4 element-animate">
-      <img src="images/img_7.jpg" alt="Image placeholder" class="img-fluid">
+<ng-container *ngIf="isLoading; else loaded">
+  <app-preloader></app-preloader>
+</ng-container>
+<ng-template #loaded>
+  <ng-container *ngIf="hasPost; else noPost">
+    <div class="row d-flex justify-content-between">
+      <h1 class="mb-4 col-11">
+        {{post.title}}
+      </h1>
+      <div class="dropdown col-1 text-center">
+        <a class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+          <span class="fa fa-chevron-down pointer"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item pointer" (click)="onEdit(post, user)">Edit</a>
+          <a class="dropdown-item pointer" (click)="onDelete(post, user)">Delete</a>
+        </div>
+      </div>
+
     </div>
-    <div class="col-md-6 mb-4 element-animate">
-      <img src="images/img_9.jpg" alt="Image placeholder" class="img-fluid">
+    <img [src]="imageUrl" width="750">
+    <hr>
+
+    <div class="post-meta">
+      <span class="category">{{postCategory.category_name}}</span>
+      <span class="mr-2">{{post.created_at | date:"MMMM d, y h:mm a"}}</span>
+      <span class="ml-2">
+        <span class="fa fa-comments"></span> {{post.comments_count}}
+      </span>
+
+      <ng-template *ngIf="!isLike && isLoggedIn">
+        <span class="ml-2 pointer btn btn-light" (click)="onLike(post)">
+          <span class="fa fa-thumbs-o-up"></span> {{countLike}}
+        </span>
+        <span class="ml-2 pointer btn btn-light" (click)="onDislike(post)">
+          <span class="fa fa-thumbs-o-down"></span> {{countDislike}}
+        </span>
+      </ng-template>
+      <!--like-->
+      <span class="ml-2 pointer btn btn-light" (click)="onLike(post)" *ngIf="((isLike == null) && isLoggedIn) || (isLike == false && isLoggedIn)">
+        <span class="fa fa-thumbs-o-up"></span> {{countLike}}
+      </span>
+      <span class="ml-2" *ngIf="isLike == true || !isLoggedIn">
+        <span class="fa fa-thumbs-up"></span> {{countLike}}
+      </span>
+      <!--dislike-->
+      <span class="ml-2 pointer btn btn-light" (click)="onDislike(post)" *ngIf="((isLike == null) && isLoggedIn) || (isLike == true && isLoggedIn)">
+        <span class="fa fa-thumbs-o-down"></span> {{countDislike}}
+      </span>
+      <span class="ml-2" *ngIf="isLike == false || !isLoggedIn">
+        <span class="fa fa-thumbs-down"></span> {{countDislike}}
+      </span>
     </div>
-    <div class="col-md-6 mb-4 element-animate">
-      <img src="images/img_11.jpg" alt="Image placeholder" class="img-fluid">
+    <div class="post-content-body text-justify post-content">
+      <div [innerHTML]="post.content"></div>
     </div>
-  </div>
-  <p>Quibusdam autem, quas molestias recusandae aperiam molestiae modi qui ipsam vel. Placeat tenetur veritatis tempore quos
-    impedit dicta, error autem, quae sint inventore ipsa quidem. Quo voluptate quisquam reiciendis, minus, animi minima eum
-    officia doloremque repellat eos, odio doloribus cum.</p>
-  <p>Temporibus quo dolore veritatis doloribus delectus dolores perspiciatis recusandae ducimus, nisi quod, incidunt ut quaerat,
-    magnam cupiditate. Aut, laboriosam magnam, nobis dolore fugiat impedit necessitatibus nisi cupiditate, quas repellat
-    itaque molestias sit libero voluptas eveniet omnis illo ullam dolorem minima.</p>
-  <p>Porro amet accusantium libero fugit totam, deserunt ipsa, dolorem, vero expedita illo similique saepe nisi deleniti. Cumque,
-    laboriosam, porro! Facilis voluptatem sequi nulla quidem, provident eius quos pariatur maxime sapiente illo nostrum quibusdam
-    aliquid fugiat! Earum quod fuga id officia.</p>
-  <p>Illo magnam at dolore ad enim fugiat ut maxime facilis autem, nulla cumque quis commodi eos nisi unde soluta, ipsa eius
-    aspernatur sint atque! Nihil, eveniet illo ea, mollitia fuga accusamus dolor dolorem perspiciatis rerum hic, consectetur
-    error rem aspernatur!</p>
-
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus magni explicabo id molestiae, minima quas assumenda
-    consectetur, nobis neque rem, incidunt quam tempore perferendis provident obcaecati sapiente, animi vel expedita omnis
-    quae ipsa! Obcaecati eligendi sed odio labore vero reiciendis facere accusamus molestias eaque impedit, consequuntur
-    quae fuga vitae fugit?</p>
-</div>
 
 
-<div class="pt-5">
-  <p>Categories:
-    <a href="#">Food</a>,
-    <a href="#">Travel</a> Tags:
-    <a href="#">#manila</a>,
-    <a href="#">#asia</a>
-  </p>
-</div>
+    <div class="pt-5">
+      Posted by
+      <a routerLink="/profile/{{post.users.id}}">{{post.users.name}}</a>
 
+      <p>Categories:
+        <a routerLink="/categories/{{postCategory.category_slug}}/{{postCategory.id}}">{{postCategory.category_name}}</a>
+        <!-- <br> Tags:
+      <a href="#">#manila</a>,
+      <a href="#">#asia</a> -->
+      </p>
+    </div>
 
-<div class="pt-5">
-  <h3 class="mb-5">6 Comments</h3>
-  <ul class="comment-list">
-    <li class="comment">
-      <div class="vcard">
-        <img src="images/person_1.jpg" alt="Image placeholder">
-      </div>
-      <div class="comment-body">
-        <h3>Jean Doe</h3>
-        <div class="meta">January 9, 2018 at 2:21pm</div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae
-          autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-        <p>
-          <a href="#" class="reply">Reply</a>
-        </p>
-      </div>
-    </li>
-
-    <li class="comment">
-      <div class="vcard">
-        <img src="images/person_1.jpg" alt="Image placeholder">
-      </div>
-      <div class="comment-body">
-        <h3>Jean Doe</h3>
-        <div class="meta">January 9, 2018 at 2:21pm</div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae
-          autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-        <p>
-          <a href="#" class="reply">Reply</a>
-        </p>
-      </div>
-
-      <ul class="children">
-        <li class="comment">
-          <div class="vcard">
-            <img src="images/person_1.jpg" alt="Image placeholder">
-          </div>
-          <div class="comment-body">
-            <h3>Jean Doe</h3>
-            <div class="meta">January 9, 2018 at 2:21pm</div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit
-              vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus,
-              nihil?
-            </p>
-            <p>
-              <a href="#" class="reply">Reply</a>
-            </p>
-          </div>
-
-
-          <ul class="children">
+    <div class="pt-5">
+      <h3 class="mb-5">{{post.comments_count}} Comments</h3>
+      <ul class="comment-list">
+        <ng-container *ngFor="let comment of postComments; let i = index">
+          <ng-container *ngIf="comment.parent_id == null">
             <li class="comment">
-              <div class="vcard">
-                <img src="images/person_1.jpg" alt="Image placeholder">
-              </div>
+              <a class="vcard">
+                <img src="assets/images/person_1.jpg" alt="Image placeholder">
+              </a>
               <div class="comment-body">
-                <h3>Jean Doe</h3>
-                <div class="meta">January 9, 2018 at 2:21pm</div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit
-                  vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus,
-                  nihil?
-                </p>
-                <p>
-                  <a href="#" class="reply">Reply</a>
-                </p>
-              </div>
+                <div class="comment-heading d-flex justify-content-between">
+                  <div>
+                    <h3 class="user">{{comment.users.name}}</h3>
+                    <h5 class="time">{{comment.created_at|date:"MMMM d, y h:mm a"}}</h5>
+                  </div>
+                  <div class="dropdown col-1 text-center" *ngIf="isLoggedIn">
+                    <a class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                      <span class="fa fa-chevron-down pointer"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item pointer" href="#edit{{comment.id}}" data-toggle="collapse" aria-expanded="false" aria-controls="reply"
+                        (click)="onEditComment(comment, user)" *ngIf="comment.user_id == user.id">Edit</a>
+                      <a class="dropdown-item pointer" (click)="onDeleteComment(post, comment, user, i)">Delete</a>
+                    </div>
+                  </div>
+                </div>
+                <p>{{comment.content}}</p>
+                <div class="collapse" id="edit{{comment.id}}">
+                  <div class="input-group" style="margin: 7px;">
+                    <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="comment.content" #editFormControl="ngModel"
+                      required>
+                    <div class="input-group-append">
+                      <a class="btn btn-link collapsed" data-toggle="collapse" href="#edit{{comment.id}}" aria-expanded="false" aria-controls="collapseTwo"
+                        class="input-group-text" id="basic-addon2" (click)="onUpdate(comment)">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <a role="button" class="input-group-text" id="basic-addon2" (click)="onCancel()" href="#edit{{comment.id}}" data-toggle="collapse"
+                        aria-expanded="false" aria-controls="reply">
+                        <i class="fa fa-times"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
 
-              <ul class="children">
-                <li class="comment">
-                  <div class="vcard">
-                    <img src="images/person_1.jpg" alt="Image placeholder">
-                  </div>
-                  <div class="comment-body">
-                    <h3>Jean Doe</h3>
-                    <div class="meta">January 9, 2018 at 2:21pm</div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam
-                      impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit
-                      necessitatibus, nihil?</p>
-                    <p>
-                      <a href="#" class="reply">Reply</a>
-                    </p>
-                  </div>
-                </li>
-              </ul>
+                <p *ngIf="isLoggedIn">
+                  <a role="button" class="btn btn-light btn-sm" href="#reply{{comment.id}}" data-toggle="collapse" aria-expanded="false" aria-controls="reply">Reply</a>
+                </p>
+                <ng-container *ngFor="let childrenCmt of childrenComments; let index = index">
+                  <ng-container *ngIf="childrenCmt.parent_id == comment.id">
+                    <ul class="comment-list">
+                      <li class="comment">
+                        <div class="vcard">
+                          <img src="assets/images/person_1.jpg" alt="Image placeholder">
+                        </div>
+                        <div class="comment-body">
+                          <div class="comment-heading d-flex justify-content-between">
+                            <div>
+                              <h3 class="user">{{childrenCmt.users.name}}</h3>
+                              <h5 class="time">{{childrenCmt.created_at|date:"MMMM d, y h:mm a"}}</h5>
+                            </div>
+                            <div class="dropdown col-1 text-center" *ngIf="isLoggedIn">
+                              <a class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-chevron-down pointer"></span>
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item pointer" (click)="onEditComment(childrenCmt, user)" href="#editChildrenComment{{childrenCmt.id}}"
+                                  data-toggle="collapse" aria-expanded="false" aria-controls="reply" *ngIf="childrenCmt.user_id == user.id">Edit</a>
+                                <a class="dropdown-item pointer" (click)="onDeleteChildrenComment(post, childrenCmt, user, index)">Delete</a>
+                              </div>
+                            </div>
+                          </div>
+                          <p>{{childrenCmt.content}}</p>
+                          <div class="collapse" id="editChildrenComment{{childrenCmt.id}}">
+                            <div class="input-group" style="margin: 7px;">
+                              <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="childrenCmt.content" #editFormControl="ngModel"
+                                required>
+                              <div class="input-group-append">
+                                <a class="btn btn-link collapsed" data-toggle="collapse" href="#editChildrenComment{{childrenCmt.id}}" aria-expanded="false"
+                                  aria-controls="collapseTwo" class="input-group-text" id="basic-addon2" (click)="onUpdate(childrenCmt)">
+                                  <i class="fa fa-edit"></i>
+                                </a>
+                                <a role="button" class="input-group-text" id="basic-addon2" (click)="onCancel()" href="#editChildrenComment{{childrenCmt.id}}"
+                                  data-toggle="collapse" aria-expanded="false" aria-controls="reply">
+                                  <i class="fa fa-times"></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <p *ngIf="isLoggedIn">
+                            <a role="button" class="btn btn-light btn-sm" (click)="onReplyChildren(childrenCmt)" data-toggle="collapse" aria-expanded="false"
+                              aria-controls="reply">Reply</a>
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                  </ng-container>
+                </ng-container>
+
+                <div class="collapse" id="reply{{comment.id}}">
+                  <ul class="comment-list">
+                    <li class="comment">
+                      <a class="vcard">
+                        <img src="assets/images/person_1.jpg" alt="Image placeholder">
+                      </a>
+                      <div class="comment-body">
+                        <div class="comment-heading">
+                          <form #replyCommentForm=ngForm (ngSubmit)="onReply(comment.id, replyCommentForm)">
+                            <div class="input-group" style="margin-top: 7px;">
+                              <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="replycomment_form.content"
+                                #replyFormControl="ngModel" aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                required>
+                              <div class="input-group-append">
+                                <button type="submit" class="input-group-text" id="basic-addon2" [disabled]="replyCommentForm.invalid" (click)="post.comments_count = post.comments_count + 1; replyChildren = true">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <small class="text-danger" *ngIf="replyFormControl.invalid&&replyFormControl.touched">Comment field is required</small>
+                          </form>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="isReply && (replychildrencomment_form.parent_id == comment.id)">
+                  <ul class="comment-list">
+                    <li class="comment">
+                      <a class="vcard">
+                        <img src="assets/images/person_1.jpg" alt="Image placeholder">
+                      </a>
+                      <div class="comment-body">
+                        <div class="comment-heading">
+                          <form #replyChildrenCommentForm=ngForm (ngSubmit)="onReplyChildrenComment(comment.id, replyChildrenCommentForm)">
+                            <div class="input-group" style="margin-top: 7px;">
+                              <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="replychildrencomment_form.content"
+                                #replyFormControl="ngModel" aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                required autofocus>
+                              <div class="input-group-append">
+                                <button type="submit" class="input-group-text pointer" id="basic-addon2" [disabled]="replyChildrenCommentForm.invalid" (click)="post.comments_count = post.comments_count + 1">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" class="input-group-text pointer" id="basic-addon2" (click)="onCancelReply()">
+                                  <i class="fa fa-times"></i>
+                                </button>
+
+                              </div>
+                            </div>
+                            <small class="text-danger" *ngIf="replyFormControl.invalid&&replyFormControl.touched">Comment field is required</small>
+                          </form>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </li>
-          </ul>
+          </ng-container>
+        </ng-container>
+        <li class="comment" *ngIf="isLoggedIn">
+          <a class="vcard">
+            <img src="assets/images/person_1.jpg" alt="Image placeholder">
+          </a>
+          <div class="comment-body">
+            <div class="comment-heading">
+              <form #commentForm=ngForm (ngSubmit)="onSubmit(commentForm)" novalidate>
+                <div class="input-group" style="margin-top: 7px;">
+                  <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="comment_form.content" #messageFormControl="ngModel"
+                    aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                  <div class="input-group-append">
+                    <button type="submit" class="input-group-text" id="basic-addon2" [disabled]="commentForm.invalid" (click)="post.comments_count = post.comments_count + 1">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </div>
+                </div>
+                <small class="text-danger" *ngIf="messageFormControl.invalid&&messageFormControl.touched">Comment field is required</small>
+              </form>
+            </div>
+          </div>
         </li>
       </ul>
-    </li>
+      <!-- END comment-list -->
+    </div>
 
+    <!-- <ul class="comment-list" *ngIf="isLoggedIn">
     <li class="comment">
-      <div class="vcard">
-        <img src="images/person_1.jpg" alt="Image placeholder">
-      </div>
+      <a class="vcard">
+        <img src="assets/images/person_1.jpg" alt="Image placeholder">
+      </a>
       <div class="comment-body">
-        <h3>Jean Doe</h3>
-        <div class="meta">January 9, 2018 at 2:21pm</div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae
-          autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-        <p>
-          <a href="#" class="reply">Reply</a>
-        </p>
+        <div class="comment-heading">
+          <form #commentForm=ngForm (ngSubmit)="onSubmit(commentForm)" novalidate>
+            <div class="input-group" style="margin-top: 7px;">
+              <input type="text" class="form-control" name="content" placeholder="Leave a comment" [(ngModel)]="comment_form.content" #messageFormControl="ngModel"
+                aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+              <div class="input-group-append">
+                <button type="submit" class="input-group-text" id="basic-addon2" [disabled]="commentForm.invalid" (click)="post.comments_count = post.comments_count + 1">
+                  <i class="fa fa-edit"></i>
+                </button>
+              </div>
+            </div>
+            <small class="text-danger" *ngIf="messageFormControl.invalid&&messageFormControl.touched">Comment field is required</small>
+          </form>
+        </div>
       </div>
     </li>
-  </ul>
-  <!-- END comment-list -->
+  </ul> -->
 
-  <div class="comment-form-wrap pt-5">
-    <h3 class="mb-5">Leave a comment</h3>
-    <form action="#" class="p-5 bg-light">
-      <div class="form-group">
-        <label for="name">Name *</label>
-        <input type="text" class="form-control" id="name">
-      </div>
-      <div class="form-group">
-        <label for="email">Email *</label>
-        <input type="email" class="form-control" id="email">
-      </div>
-      <div class="form-group">
-        <label for="website">Website</label>
-        <input type="url" class="form-control" id="website">
-      </div>
-
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <input type="submit" value="Post Comment" class="btn btn-primary">
-      </div>
-
-    </form>
-  </div>
-</div>
+    <div class="comment-form-wrap pt-5 d-flex justify-content-center" *ngIf="!isLoggedIn">
+      <a class="btn btn-outline-primary btn-sm" routerLink="/login" style="border-radius: 25px;">Login to comments</a>
+    </div>
+  </ng-container>
+</ng-template>
+<ng-template #noPost>
+  <app-page-not-found></app-page-not-found>
+</ng-template>

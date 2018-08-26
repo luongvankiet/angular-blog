@@ -1,0 +1,23 @@
+<h2 style="margin-bottom: 20px">Manage Roles</h2>
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Display_name</th>
+      <th>Description</th>
+      <th>Created_at</th>
+      <th>Updated_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let role of roles">
+      <td>{{role.id}}</td>
+      <td>{{role.name}}</td>
+      <td>{{role.display_name}}</td>
+      <td>{{role.description}}</td>
+      <td>{{role.created_at|date}}</td>
+      <td>{{role.updated_at|date}}</td>
+    </tr>
+  </tbody>
+</table>

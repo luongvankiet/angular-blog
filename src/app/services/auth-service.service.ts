@@ -6,11 +6,11 @@ import { JwtAuthService } from './jwt-auth.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(this.jwt.loggedIn());
-  authStatus = this.loggedIn.asObservable();
+  private isLoggedIn = new BehaviorSubject<boolean>(this.jwt.isLoggedIn());
+  authStatus = this.isLoggedIn.asObservable();
 
   changeAuthStatus(value: boolean){
-    this.loggedIn.next(value)
+    this.isLoggedIn.next(value)
   }
 
   constructor(private jwt: JwtAuthService) { }

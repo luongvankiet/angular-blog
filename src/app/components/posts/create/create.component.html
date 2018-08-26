@@ -1,0 +1,60 @@
+<ng-container *ngIf="isLoggedIn; else login">
+  <h3>Create new post</h3>
+  <hr>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form #createForm="ngForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" novalidate>
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" [ngClass]="{ 'is-invalid': textFormControl.invalid&&textFormControl.touched }" name="title"
+            #textFormControl="ngModel" [(ngModel)]="form.title" placeholder="Title" required maxlength="255" />
+          <div class="invalid-feedback" *ngIf="textFormControl.errors?.required&&textFormControl.touched">Title field is required</div>
+          <div class="invalid-feedback" *ngIf="textFormControl.errors?.maxlength&&textFormControl.touched">Title field must be less than 255 characters</div>
+        </div>
+
+        <div class="form-group">
+          <label for="thumbnail">Thumbnail</label>
+          <input type="file" class="form-control image" name="thumbnail" (change)="onUpload($event.target.files)">
+        </div>
+
+        <div class="form-group mt-30">
+          <label for="content">Content</label>
+          <ckeditor name="content" [config]="{extraPlugins: 'divarea'}" [ngClass]="{ 'is-invalid': contentFormControl.invalid&&contentFormControl.touched }" [(ngModel)]="form.content"
+            debounce="500" #contentFormControl="ngModel" placeholder="Content" required></ckeditor>
+          <div class="invalid-feedback" *ngIf="contentFormControl.errors?.required&&contentFormControl.dirty">Content field is required</div>
+        </div>
+
+        <div class="form-group">
+          <label>Categories</label>
+          <select [(ngModel)]="form.category_id" name="category" class="form-control" [ngClass]="{ 'is-invalid': categoryFormControl.invalid&&categoryFormControl.touched }"
+            #categoryFormControl="ngModel" required>
+            <option [ngValue]="null">
+              Please Select
+            </option>
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{category.category_name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="categoryFormControl.errors?.required&&categoryFormControl.touched">Category is required</div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary btn-block" [disabled]="createForm.invalid"> Save </button>
+            </div>
+            <div class="col-md-6">
+              <button type="button" class="btn btn-default btn-block" (click)="onBack()"> Cancel </button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</ng-container>
+<ng-template #login>
+  <div class="container text-center">
+    <a routerLink="/login">
+      <h3>Login required</h3>
+      <img src="assets/images/login.png" width="400" alt="Login required">
+    </a>
+  </div>
+</ng-template>

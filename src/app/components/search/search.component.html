@@ -1,0 +1,64 @@
+<ng-container *ngIf="isLoading; else loaded">
+  <app-preloader></app-preloader>
+</ng-container>
+<ng-template #loaded>
+  <ng-container *ngIf="posts;else noPost">
+    <ng-container *ngFor="let category of posts">
+      <ng-container *ngIf="category.posts_count > 0; else noPostOnCategory">
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h2 class="mb-4">Category: {{category.category_name}}</h2>
+          </div>
+        </div>
+
+        <div class="row mb-5 mt-5" *ngFor="let post of category.posts">
+          <div class="col-md-12">
+            <div class="post-entry-horzontal">
+              <a routerLink="/posts/{{post.slug}}">
+                <ng-container *ngIf="post.images.length > 0; else noImage">
+                  <ng-container *ngFor="let image of post.images">
+                    <img class="image" data-animate-effect="fadeIn" src="http://localhost:8000/images/{{image.image}}">
+                  </ng-container>
+                </ng-container>
+                <ng-template #noImage>
+                  <img class="image" data-animate-effect="fadeIn" src="http://placehold.it/250">
+                </ng-template>
+                <span class="text">
+                  <div class="post-meta">
+                    <span class="category">{{category.category_name}}</span>
+                    <span class="mr-2">{{post.created_at|date}}</span>
+                    <span class="ml-2">
+                      <span class="fa fa-comments"></span> {{post.comments_count}}</span>
+                  </div>
+                  <h2>{{post.title}}</h2>
+                  <div class="post-meta">Posted by: <a routerLink="/profile/{{post.users.id}}">{{post.users.name}}</a></div>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="row">
+        <div class="col-md-12 text-center">
+          <nav aria-label="Page navigation" class="text-center">
+            <pagination [totalItems]="posts.length" [itemsPerPage]="5" (pageChanged)="pageChanged($event)"></pagination>
+          </nav>
+        </div>
+      </div> -->
+      </ng-container>
+      <ng-template #noPostOnCategory>
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h2 class="mb-4">Category: {{category.category_name}}</h2>
+          </div>
+        </div>
+        <div class="text-center">
+          <p>No post is available in this category</p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+  <ng-template #noPost>
+    <app-page-not-found></app-page-not-found>
+  </ng-template>
+</ng-template>

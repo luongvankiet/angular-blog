@@ -1,150 +1,36 @@
-<div class="top-bar fixed">
-    <div class="container-fluid">
-        <div class="row  d-flex justify-content-end">
-            <div class="col-2 search-top">
-                <!-- <a href="#"><span class="fa fa-search"></span></a> -->
-                <form action="#" class="search-top-form">
-                    <span class="icon fa fa-search"></span>
-                    <input type="text" id="s" placeholder="Type keyword to search...">
-                </form>
+<div class="top-bar sticky-top">
+    <div class="container mt" >
+        <div class="row d-flex justify-content-between">
+            <div class="col-2 social text-center">
+                <h4>
+                    <a class="nav-link pointer" routerLink="/">
+                        <b>Blog</b>
+                    </a>
+                </h4>
             </div>
 
-            <div class="col-2 social text-center">
-                <div class="dropdown" *ngIf="loggedIn">
-                    <a class="nav-link dropdown-toggle pointer" id="dropdownUserButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">abc</a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
-                        <a class="dropdown-item text-dark" routerLink="profile">Profile</a>
-                        <a class="dropdown-item text-dark pointer" (click)="logout($event)">Logout</a>
+            <div class="col-8 d-flex justify-content-end">
+                <div class="row">
+                    <div class="col-6 search-top">
+                        <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                        <form #searchForm="ngForm" class="search-top-form">
+                            <span class="icon fa fa-search"></span>
+                            <input type="text" name="search" [(ngModel)]='term' (keyup)="onChange($event.target.value)" placeholder="Type keyword to search...">
+                        </form>
                     </div>
-                </div>
-                <div class="row" *ngIf="!loggedIn">
-                    <div class="col-md-12">
-                        <a class="nav-link" href="#" (click)="openModal(template, $event)">Login</a>
-                        <ng-template #template>
-                            <tabset [justified]="true">
-                                <tab heading="Login" class="container">
-                                    <ul id="login-dp">
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <form #loginForm=ngForm (ngSubmit)="loginSubmit()">
-                                                        <div class="form-group row">
-                                                            <label for="email" class="col-sm-2 col-form-label">Email</label>
-                                                            <div class="col-sm-10">
-                                                                <input type="email" name="email" class="form-control" value="" placeholder="Email address" [(ngModel)]="login_form.email"
-                                                                    required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="exampleInputPassword2" class="col-sm-2 col-form-label">Password</label>
-                                                            <div class="col-sm-10">
-                                                                <input type="password" name="password" class="form-control" value="" [(ngModel)]="login_form.password" placeholder="Password"
-                                                                    required>
-                                                                <small id="passwordHelpInline" class="text-muted">
-                                                                    Must be more than 6 characters long.
-                                                                </small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group d-flex justify-content-end">
-                                                            <a href="#" (click)="openModal2(templateNested, $event)">
-                                                                Forget password?
-                                                            </a>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.valid" (click)="hideLoginModal()">Sign in</button>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <button type="button" class="btn btn-default btn-block" aria-label="Close" (click)="modalRef.hide()">Cancel</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </tab>
-                                <tab heading="Register" class="container">
-                                    <ul id="login-dp">
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <form #registerForm=ngForm (ngSubmit)="registerSubmit()">
-                                                        <div class="form-group">
-                                                            <label for="name">Name</label>
-                                                            <input type="text" name="name" class="form-control" value="" [(ngModel)]="register_form.name" placeholder="Name" required>
-                                                            <div class="alert alert-danger" [hidden]="!error.name">{{error.name}}</div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="email">Email address</label>
-                                                            <input type="email" name="email" class="form-control" value="" [(ngModel)]="register_form.email" placeholder="Email address"
-                                                                required>
-                                                            <div class="alert alert-danger" [hidden]="!error.email">{{error.email}}</div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="exampleInputPassword2">Password</label>
-                                                            <input type="password" name="password" class="form-control" value="" [(ngModel)]="register_form.password" placeholder="Password"
-                                                                required>
-                                                            <div class="alert alert-danger" [hidden]="!error.password">{{error.password}}</div>
-                                                            <small class="text-muted">
-                                                                Must be more than 6 characters long.
-                                                            </small>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="exampleInputPassword2">Confirm Password</label>
-                                                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" [(ngModel)]="register_form.password_confirmation"
-                                                                placeholder="Confirm Password" required>
-                                                            <small class="text-muted">
-                                                                Confirm password.
-                                                            </small>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <button type="submit" class="btn btn-primary btn-block" [disabled]="!registerForm.valid" (click)="hideRegisterModal()">Submit</button>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <button type="button" class="btn btn-default btn-block" aria-label="Close" (click)="modalRef.hide()">Cancel</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </tab>
-                            </tabset>
-                        </ng-template>
-                        <ng-template #templateNested>
-                            <div class="modal-header">
-                                <h4 class="modal-title pull-left">Reset Password</h4>
-                                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef2.hide()">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                    <div class="col-6 social text-center">
+                        <div class="dropdown" *ngIf="isLoggedIn">
+                            <a class="nav-link dropdown-toggle pointer" id="dropdownUserButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hi {{user.name}}</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownUserButton">
+                                <a class="dropdown-item text-dark" routerLink="/profile/{{user.id}}">Profile</a>
+                                <a class="dropdown-item text-dark" routerLink="/posts/create">Create new post</a>
+                                <a class="dropdown-item text-dark pointer" (click)="logout($event)">Logout</a>
                             </div>
-                            <div class="modal-body">
-                                <form #ResetPasswordForm="ngForm" (ngSubmit)="resetPasswordSubmit()">
-                                    <div class="form-group row">
-                                        <label for="email" class="col-sm-2 col-form-label">Email: </label>
-                                        <div class="col-sm-10">
-                                            <input type="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="resetpassword_form.email" required>
-                                            <div class="alert alert-danger" [hidden]="!error.email">{{error.email}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="row justify-content-end">
-                                        <div class="col-3">
-                                            <button *ngIf="modalRef" type="submit" class="btn btn-primary btn-block" [disabled]="!ResetPasswordForm.valid">Submit</button>
-                                        </div>
-                                        <div class="col-3">
-                                            <button *ngIf="modalRef" type="button" class="btn btn-default btn-block" (click)="modalRef2.hide()">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </ng-template>
+                        </div>
+                        <div class="row" *ngIf="!isLoggedIn">
+                            <a class="nav-link pointer col-5" routerLink="/login">Login</a>
+                            <a class="nav-link pointer" routerLink="/signup">Signup</a>
+                        </div>
                     </div>
                 </div>
             </div>

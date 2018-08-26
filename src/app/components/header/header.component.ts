@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -9,8 +7,7 @@ import { map } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
   public categories;
-
-  private _observableCategoriesData: Observable<any>;
+  public moreCategories;
   constructor(private _categoryService: CategoryService) { }
 
   ngOnInit() {
@@ -18,18 +15,14 @@ export class HeaderComponent implements OnInit {
   }
 
   getCategoriesData() {
-    this._observableCategoriesData = this._categoryService.getAllCategories();
-    this._observableCategoriesData.pipe(
-      map(data => {
-        return data.data;
-      })).subscribe(
+    this._categoryService.getAllCategories().subscribe(
         data => this.handleCategoriesData(data),
-        error => console.log(error)
       );
   }
 
   handleCategoriesData(data){
-    this.categories = data;
+    this.categories = data.data.slice(0,5);
+    this.moreCategories = data.data.slice(5, data.data.length);
   }
 
 }
